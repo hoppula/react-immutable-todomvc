@@ -2,12 +2,13 @@ React = require("react")
 Immutable = require("immutable")
 
 Todos = require("./components/todos.coffee")
-todos = Immutable.Map()
+todos = Immutable.Vector()
 
-# read from localStorage
+# read stored state from localStorage
 if localStorage
   todosJSON = localStorage.getItem("immutableTodos")
   if todosJSON
-    todos = Immutable.fromJS(JSON.parse(todosJSON))
+    # stringifying sparse arrays to JSON creates null values, get rid of them
+    todos = Immutable.fromJS(JSON.parse(todosJSON)).filter((todo) -> todo isnt null).toVector()
 
 React.renderComponent <Todos todos={todos} />, document.getElementById("app")

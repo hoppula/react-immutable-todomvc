@@ -5,6 +5,16 @@ Router = require("director").Router
 Footer = require("./footer.coffee")
 TodoItem = require("./todo_item.coffee")
 
+generateUuid = ->
+  uuid = ""
+  i = 0
+  while i < 32
+    random = Math.random() * 16 | 0
+    uuid += "-"  if i is 8 or i is 12 or i is 16 or i is 20
+    uuid += ((if i is 12 then 4 else ((if i is 16 then (random & 3 | 8) else random)))).toString(16)
+    i++
+  uuid
+
 filters =
   all: "all"
   active: "active"
@@ -23,7 +33,7 @@ Todos = React.createClass
 
     router.init "/"
 
-  # cursor update is handled here, newTodos is the new immutable todos Map that replaces the existing state
+  # cursor update is handled here, newTodos is the new immutable todos Vector that replaces the existing state
   onChange: (newTodos) ->
     if localStorage
       localStorage.setItem("immutableTodos", JSON.stringify( newTodos.toJS() ))
@@ -34,10 +44,7 @@ Todos = React.createClass
   add: (event) ->
     if event.charCode is 13 # Enter
       @state.rootCursor.update (todos) ->
-        last = todos.last()
-        id = if last then (parseInt(last.get("id")) + 1).toString() else "0"
-        todos.set(id, Immutable.Map(id: id, title: event.target.value, completed: false))
-
+        todos.push Immutable.Map(id: generateUuid(), title: event.target.value, completed: false)
       # clear input value
       @refs.add.getDOMNode().value = ""
 
@@ -46,7 +53,7 @@ Todos = React.createClass
     @state.rootCursor.update (todos) ->
       todos.map (todo) ->
         todo.set "completed", checked
-      .toMap()
+      .toVector()
 
   render: ->
     <section id="todoapp">

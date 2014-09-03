@@ -6,7 +6,7 @@ Footer = React.createClass
     @props.todosCursor.update (todos) ->
       todos.filter (todo) ->
         not todo.get("completed")
-      .toMap()
+      .toVector()
 
   render: ->
     remaining = @props.todosCursor

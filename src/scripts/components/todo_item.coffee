@@ -8,8 +8,10 @@ TodoItem = React.createClass
 
   toggleCompleted: (event) ->
     @props.todosCursor.update (todos) =>
-      todos.updateIn [@props.todo.get("id")], (todo) ->
-        todo.set "completed", not todo.get("completed")
+      todos.update(
+        todos.findKey((todo) => todo.get("id") is @props.todo.get("id")),
+        (todo) -> todo.set "completed", not todo.get("completed")
+      )
 
   toggleEdit: (event) ->
     @setState editing: true, =>
@@ -20,8 +22,10 @@ TodoItem = React.createClass
 
     if title
       @props.todosCursor.update (todos) =>
-        todos.updateIn [@props.todo.get("id")], (todo) ->
-          todo.set "title", title
+        todos.update(
+          todos.findKey((todo) => todo.get("id") is @props.todo.get("id")),
+          (todo) -> todo.set "title", title
+        )
     else
       @destroy()
 
@@ -35,13 +39,15 @@ TodoItem = React.createClass
   updateOnEnter: (event) ->
     if event.charCode is 13 # Enter
       @props.todosCursor.update (todos) =>
-        todos.updateIn [@props.todo.get("id")], (todo) ->
-          todo.set "title", event.target.value
+        todos.update(
+          todos.findKey((todo) => todo.get("id") is @props.todo.get("id")),
+          (todo) -> todo.set "title", event.target.value
+        )
       @setState editing: false
 
   destroy: ->
     @props.todosCursor.update (todos) =>
-      todos.delete @props.todo.get("id")
+      todos.delete todos.findKey((todo) => todo.get("id") is @props.todo.get("id"))
 
   shouldComponentUpdate: (newProps, newState) ->
     (@props.todo isnt newProps.todo) or (@state.editing isnt newState.editing)
