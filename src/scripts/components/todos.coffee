@@ -5,6 +5,15 @@ Router = require("director").Router
 Footer = require("./footer.coffee")
 TodoItem = require("./todo_item.coffee")
 
+VectorCursorSugar = (cursor) ->
+  cursor: cursor
+  update: (id, callback) ->
+    cursor.update (vector) ->
+      vector.update(
+        vector.findKey((item) -> item.get("id") is id),
+        (item) -> callback(item)
+      )
+
 generateUuid = ->
   uuid = ""
   i = 0
@@ -73,7 +82,7 @@ Todos = React.createClass
               when "active" then not todo.get("completed")
               when "completed" then todo.get("completed")
           .map (todo) =>
-            <TodoItem todo={todo.deref()} todosCursor={@state.rootCursor} key={todo.deref().get("id")} />
+            <TodoItem todo={todo.deref()} todos={VectorCursorSugar(@state.rootCursor)} key={todo.deref().get("id")} />
           .toJS()
         }
         </ul>
