@@ -31,6 +31,7 @@ filters =
 
 Todos = React.createClass
   getInitialState: ->
+    undoStates: Immutable.Vector()
     rootCursor: @props.todos.cursor(@onChange)
     filter: filters.all
 
@@ -47,8 +48,15 @@ Todos = React.createClass
     if localStorage
       localStorage.setItem("immutableTodos", JSON.stringify( newTodos.toJS() ))
 
-    @setState rootCursor: newTodos.cursor(@onChange)
+    previousRootCursor = @state.rootCursor
+    @setState rootCursor: newTodos.cursor(@onChange), undoStates: @state.undoStates.push(previousRootCursor)
     return
+
+  undo: (event) ->
+    if @state.undoStates.length
+      @setState rootCursor: @state.undoStates.last(), undoStates: @state.undoStates.pop()
+      if localStorage
+        localStorage.setItem("immutableTodos", JSON.stringify( @state.undoStates.last().toJS() ))
 
   add: (event) ->
     if event.charCode is 13 # Enter
@@ -66,6 +74,7 @@ Todos = React.createClass
 
   render: ->
     <section id="todoapp">
+
       <header id="header">
         <h1>todos</h1>
         <input id="new-todo" onKeyPress={@add} placeholder="What needs to be done?" ref="add" autofocus />
@@ -74,6 +83,9 @@ Todos = React.createClass
       <section id="main">
         <input id="toggle-all" type="checkbox" onClick={@toggleAll} />
         <label htmlFor="toggle-all">Mark all as complete</label>
+
+        {<button className="undo" onClick={@undo}>Undo</button> if @state.undoStates.length}
+
         <ul id="todo-list">
         {
           @state.rootCursor.filter (todo) =>
