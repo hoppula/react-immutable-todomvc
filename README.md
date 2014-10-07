@@ -6,6 +6,8 @@ Persists data to Local Storage after changes.
 
 Uses browserify for builds and watchify for live builds.
 
+Live demo available @ [https://rawgit.com/hoppula/react-immutable-todomvc/master/public/index.html](https://rawgit.com/hoppula/react-immutable-todomvc/master/public/index.html)
+
 ## Up and Running
 First, clone the repo...
 
