@@ -1,4 +1,4 @@
-React = require("react")
+React = require("react/addons")
 classSet = React.addons.classSet
 
 TodoItem = React.createClass
@@ -38,7 +38,7 @@ TodoItem = React.createClass
 
   destroy: ->
     @props.todos.cursor.update (todos) =>
-      todos.delete todos.findKey((todo) => todo.get("id") is @props.todo.get("id"))
+      todos.delete todos.findKey((todo) => todo?.get("id") is @props.todo.get("id"))
 
   shouldComponentUpdate: (newProps, newState) ->
     (@props.todo isnt newProps.todo) or (@state.editing isnt newState.editing)

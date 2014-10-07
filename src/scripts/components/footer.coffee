@@ -1,22 +1,22 @@
-React = require("react")
+React = require("react/addons")
 classSet = React.addons.classSet
 
 Footer = React.createClass
   clearCompleted: ->
     @props.todosCursor.update (todos) ->
       todos.filter (todo) ->
-        not todo.get("completed")
+        todo isnt undefined and not todo.get("completed")
       .toVector()
 
   render: ->
     remaining = @props.todosCursor
       .filter (todo) ->
-        not todo.get("completed")
+        todo isnt undefined and not todo.get("completed")
       .count()
 
     completed = @props.todosCursor
       .filter (todo) ->
-        todo.get("completed")
+        todo isnt undefined and todo.get("completed")
       .count()
 
     remainingTitle = if remaining is 1 then "item" else "items"

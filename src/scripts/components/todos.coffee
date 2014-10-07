@@ -1,4 +1,4 @@
-React = require("react")
+React = require("react/addons")
 Immutable = require("immutable")
 Router = require("director").Router
 
@@ -88,7 +88,10 @@ Todos = React.createClass
 
         <ul id="todo-list">
         {
-          @state.rootCursor.filter (todo) =>
+          @state.rootCursor.filter (todo) ->
+            # filter out deleted
+            todo isnt undefined
+          .filter (todo) =>
             switch @state.filter
               when "all" then true
               when "active" then not todo.get("completed")

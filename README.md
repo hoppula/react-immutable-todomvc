@@ -4,7 +4,7 @@
 
 Persists data to Local Storage after changes.
 
-Uses excellent [react-starter-template](https://github.com/johnthethird/react-starter-template) by John Lynch.
+Uses browserify for builds and watchify for live builds.
 
 ## Up and Running
 First, clone the repo...
@@ -15,14 +15,22 @@ Then install the npm and bower modules
 
 ```
 $ npm install
-$ bin/bower install
+$ npm run bower
+```
+
+build
+```
+$ npm run build
+```
+
+watch
+```
+$ npm run watch
 ```
 
 start server
 ```
-$ bin/gulp dev
+$ npm run server
 ```
 
 then go to [http://localhost:4000/](http://localhost:4000/)
-
-If you have the Chrome LiveReload extension installed, then your browser will automatically reload when any file in /src changes.

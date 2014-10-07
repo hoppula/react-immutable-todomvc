@@ -1,4 +1,4 @@
-React = require("react")
+React = require("react/addons")
 Immutable = require("immutable")
 
 Todos = require("./components/todos.coffee")

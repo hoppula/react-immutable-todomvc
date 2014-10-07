@@ -28,6 +28,5 @@ $RECYCLE.BIN/
 # App specific
 *.log
 node_modules/
-bower_components/
-dist/
+lib/components/
 .tmp
