@@ -59,7 +59,7 @@ Todos = React.createClass
         localStorage.setItem("immutableTodos", JSON.stringify( @state.undoStates.last().toJS() ))
 
   add: (event) ->
-    if event.charCode is 13 # Enter
+    if event.keyCode is 13 # Enter
       @state.rootCursor.update (todos) ->
         todos.push Immutable.Map(id: generateUuid(), title: event.target.value, completed: false)
       # clear input value
@@ -77,7 +77,7 @@ Todos = React.createClass
 
       <header id="header">
         <h1>todos</h1>
-        <input id="new-todo" onKeyPress={@add} placeholder="What needs to be done?" ref="add" autofocus />
+        <input id="new-todo" onKeyDown={@add} placeholder="What needs to be done?" ref="add" autofocus />
       </header>
 
       <section id="main">

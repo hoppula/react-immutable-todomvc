@@ -25,13 +25,11 @@ TodoItem = React.createClass
 
     @setState editing: false
 
-  revertOnEscape: (event) ->
+  revertOrUpdate: (event) ->
     if event.keyCode is 27 # Esc
       @refs.edit.getDOMNode().value = @props.todo.get("title")
       @setState editing: false
-
-  updateOnEnter: (event) ->
-    if event.charCode is 13 # Enter
+    if event.keyCode is 13 # Enter
       @props.todos.update @props.todo.get("id"), (todo) ->
         todo.set "title", event.target.value
       @setState editing: false
@@ -56,7 +54,7 @@ TodoItem = React.createClass
         <label onDoubleClick={@toggleEdit}>{@props.todo.get("title")}</label>
         <button className="destroy" onClick={@destroy}></button>
       </div>
-      <input className="edit" defaultValue={@props.todo.get("title")} onKeyDown={@revertOnEscape} onKeyPress={@updateOnEnter} onBlur={@close} ref="edit" />
+      <input className="edit" defaultValue={@props.todo.get("title")} onKeyDown={@revertOrUpdate} onBlur={@close} ref="edit" />
     </li>
 
 module.exports = TodoItem
